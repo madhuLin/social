@@ -1,42 +1,42 @@
 <template>
-  <div class="community">
+  <div class="flex justify-center">
     <!-- 看板 -->
-    <div class="sidebar">
-      <h2>精選看板</h2>
-      <ul class="board-list">
-        <li v-for="(name, id) in boards" :key="id">
-          <a :href="`/board/${id}`">{{ name }}</a>
+    <div class="flex flex-col w-1/4 bg-social-primary">
+      <h2 class="text-xl font-bold mb-4">精選看板</h2>
+      <ul class="list-none">
+        <li v-for="(name, id) in boards" :key="id" class="mb-2">
+          <a :href="`/board/${id}`" class="text-blue-600 hover:text-blue-800">{{ name }}</a>
         </li>
       </ul>
     </div>
     <!-- 文章 -->
-    <div class="main-content">
-      <h2>文章列表</h2>
+    <div class="flex flex-col w-3/4">
+      <h2 class="text-xl font-bold mb-4">文章列表</h2>
       <div class="articles">
         <!-- 渲染文章清單 -->
         <div class="article" v-for="article in articles" :key="article.articleId">
-          <div class="author-date">
-            <p>作者：{{ article.articleAuthorName }}</p>
+          <div class="flex justify-between mb-2">
+            <p class="font-bold">作者：{{ article.articleAuthorName }}</p>
             <p>發佈日期：{{ formatDate(article.publicationDate) }}</p>
           </div>
-          <h3>{{ article.articleTitle }}</h3>
+          <h3 class="text-lg font-bold mb-2">{{ article.articleTitle }}</h3>
           <a-typography-paragraph
             :ellipsis="ellipsis ? { rows: 2, expandable: true, symbol: 'more' } : false"
             :content="article.articleContent"
+            class="mb-2"
           />
-          <div class="counts">
-            <p>按讚數：{{ article.likeCount }}</p>
-            <p>評論數：{{ article.commentCount }}</p>
+          <div class="flex">
+            <p class="mr-4">按讚數：{{ article.likeCount }}</p>
+            <p class="mr-4">評論數：{{ article.commentCount }}</p>
             <p>收藏數：{{ article.bookmarkCount }}</p>
           </div>
-          <hr />
+          <hr class="my-4 border-t border-gray-300" />
         </div>
       </div>
-      
     </div>
 
     <!-- 右側內容 -->
-    <div class="sidebar"></div>
+    <div class="flex flex-col w-1/4"></div>
   </div>
 </template>
 
@@ -93,81 +93,3 @@ const formatDate = (dateStr) => {
   }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 };
 </script>
-
-
-<style lang="less">
-.community {
-  display: flex;
-  justify-content: center;
-}
-/* 看板 */
-
-.sidebar {
-  // width: 25%;
-  flex: 0 0 25%;
-}
-
-.board-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.board-list li {
-  margin-bottom: 10px;
-  align-items: flex-end;
-}
-
-.board-list li a {
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-  text-align: right;
-  &:hover {
-    color: #007bff;
-  }
-}
-
-/* 文章列表容器 */
-.articles {
-  margin-top: 20px;
-}
-
-/* 单篇文章容器 */
-.article {
-  margin-bottom: 20px;
-}
-
-/* 作者和日期 */
-.author-date {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-/* 文章标题 */
-h3 {
-  margin-bottom: 10px;
-}
-
-/* 文章内容 */
-a-typography-paragraph {
-  margin-bottom: 10px;
-}
-
-/* 按讚数、评论数和收藏数 */
-.counts {
-  display: flex;
-  justify-content: flex-start;
-  font-style: italic;
-  p {
-    margin-right: 10px;
-  }
-}
-
-/* 分割线 */
-hr {
-  margin-top: 20px;
-  border: none;
-  border-top: 1px solid #ccc;
-}
-</style>

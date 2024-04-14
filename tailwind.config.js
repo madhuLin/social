@@ -1,12 +1,18 @@
 // tailwind.config.js
 module.exports = {
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+  ],
   theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
+    extend: {
+      "social-primary" : "#0F0E25",
+      "social-secondary" : "#4C35AF",
+      "social-font" : "#FFFFFF",
+    },
+    fontFamily: {
+
+    },
   },
   plugins: [],
 }
