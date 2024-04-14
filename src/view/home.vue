@@ -1,30 +1,33 @@
 <template>
-  <div class="flex justify-center">
+  <div class="flex justify-center mt-8">
     <!-- 看板 -->
-    <div class="flex flex-col w-1/4 bg-social-primary">
+    <div class="flex flex-col mx-4">
       <h2 class="text-xl font-bold mb-4">精選看板</h2>
-      <ul class="list-none">
-        <li v-for="(name, id) in boards" :key="id" class="mb-2">
-          <a :href="`/board/${id}`" class="text-blue-600 hover:text-blue-800">{{ name }}</a>
+      <ul class=" text-social-font-second">
+        <li v-for="(name, id) in boards" :key="id" class="hover:bg-social-c3 p-2">
+          <div class="">
+            <a :href="`/board/${id}`">{{ name }}</a>
+          </div>
         </li>
       </ul>
     </div>
     <!-- 文章 -->
-    <div class="flex flex-col w-3/4">
+    <div class="flex flex-col w-1/2 mx-4">
       <h2 class="text-xl font-bold mb-4">文章列表</h2>
       <div class="articles">
         <!-- 渲染文章清單 -->
-        <div class="article" v-for="article in articles" :key="article.articleId">
+        <div class="article text-social-font-second hover:bg-social-c3" v-for="article in articles"
+          :key="article.articleId">
           <div class="flex justify-between mb-2">
             <p class="font-bold">作者：{{ article.articleAuthorName }}</p>
             <p>發佈日期：{{ formatDate(article.publicationDate) }}</p>
           </div>
-          <h3 class="text-lg font-bold mb-2">{{ article.articleTitle }}</h3>
-          <a-typography-paragraph
-            :ellipsis="ellipsis ? { rows: 2, expandable: true, symbol: 'more' } : false"
-            :content="article.articleContent"
-            class="mb-2"
-          />
+          <h3 class="text-lg font-bold mb-2 text-social-font">{{ article.articleTitle }}</h3>
+          <p class="mb-2 text-social-font-second">
+            {{ ellipsis && article.articleContent.length > 100 ? article.articleContent.slice(0, 100) + '...' :
+              article.articleContent }}
+          </p>
+
           <div class="flex">
             <p class="mr-4">按讚數：{{ article.likeCount }}</p>
             <p class="mr-4">評論數：{{ article.commentCount }}</p>
@@ -36,7 +39,7 @@
     </div>
 
     <!-- 右側內容 -->
-    <div class="flex flex-col w-1/4"></div>
+    <div class="flex flex-col mx-4"></div>
   </div>
 </template>
 
@@ -88,8 +91,7 @@ articleListApi()
 // 格式化日期函數
 const formatDate = (dateStr) => {
   const date = new Date(dateStr);
-  return `${date.getFullYear()}-${
-    date.getMonth() + 1
-  }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  return `${date.getFullYear()}-${date.getMonth() + 1
+    }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 };
 </script>

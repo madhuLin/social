@@ -1,6 +1,16 @@
-function loginApi(data) {
-    return $axios({
+import { request } from "../utils/request.js";
+
+export function loginApi(data) {
+    return request({
       'url': '/user/login',
+      'method': 'post',
+      data
+    })
+  }
+
+  export function signUpApi(data) {
+    return request({
+      'url': '/user/signUp',
       'method': 'post',
       data
     })

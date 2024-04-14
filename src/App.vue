@@ -7,14 +7,11 @@ const router = useRouter();
 </script>
 
 <template>
-    <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-  <h1>
-    Hello world!
-  </h1>
-  <!-- <Header></Header> -->
-  <!-- <router-view></router-view> -->
+  <div class="flex flex-col min-h-3 bg-social-primary text-social-font">
+      <Header></Header>
+    <router-view></router-view>
+  </div>
+
 </template>
 
 <style>
