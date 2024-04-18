@@ -14,3 +14,11 @@ export function boardListApi() {
       'method': 'get',
     })
 }
+
+
+export function boardListApi() {
+  return request({
+      'url': '/account',
+      'method': 'get',
+    })
+}

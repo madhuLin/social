@@ -6,6 +6,7 @@ import ArticleList from '../view/articleList.vue';
 import Login from '../view/login.vue';
 import Account from '../view/account.vue';
 import SignUp from '../view/signUp.vue';
+import Test from '../view/test.vue';
 
 const routes = [
     { path: '/', component: Home, name:"home" },
@@ -14,6 +15,9 @@ const routes = [
     { path: '/account', component: Account, name:"account" },
     { path: '/login', component: Login, name:"login" },
     { path: '/signUp', component: SignUp, name:"signUp" },
+    { path: '/test', component: Test, name:"test" },
+    { path: '/test/ss', component: Test, name:"test" },
+
 ];
 
 const router = createRouter({
