@@ -9,9 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@web3-storage/w3up-client": "^12.5.2",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.8",
-    "ipfs-http-client": "^60.0.1",
+    "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "web3": "^4.7.0"

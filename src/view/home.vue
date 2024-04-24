@@ -31,7 +31,8 @@
           <div class="flex">
             <p class="mr-4">按讚數：{{ article.likeCount }}</p>
             <p class="mr-4">評論數：{{ article.commentCount }}</p>
-            <p>收藏數：{{ article.bookmarkCount }}</p>
+            <p class="mr-4">收藏數：{{ article.bookmarkCount }}</p>
+            <p v-if="Verifiable" @click="StartVerification">發起驗證</p>
           </div>
           <hr class="my-4 border-t border-gray-300" />
         </div>
@@ -40,6 +41,12 @@
 
     <!-- 右側內容 -->
     <div class="flex flex-col mx-4"></div>
+    <!-- 右下角按鈕 -->
+    <router-link to="/new-post" v-if="Verifiable" class="fixed bottom-4 right-4 bg-social-c2 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"></path>
+      </svg>
+    </router-link>
   </div>
 </template>
 
@@ -50,7 +57,7 @@ import { articleListApi, boardListApi } from "../api/home.js";
 const boards = ref([]);
 boardListApi()
   .then((res) => {
-    console.log(res.data.code);
+    // console.log(res.data.code);
     if (res.data.code === 1) {
       // 如果請求成功，將文章列表資料賦值給articles
       boards.value = res.data.data || [];
@@ -71,7 +78,7 @@ const articles = ref([]);
 // 呼叫後端介面取得文章列表數據
 articleListApi()
   .then((res) => {
-    console.log(res.data.data);
+    // console.log(res.data.data);
     if (res.data.code === 1) {
       // 如果請求成功，將文章列表資料賦值給articles
       articles.value = res.data.data || [];
@@ -94,4 +101,12 @@ const formatDate = (dateStr) => {
   return `${date.getFullYear()}-${date.getMonth() + 1
     }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 };
+
+//增加驗證按鈕
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+const Verifiable = ref(userInfo ? true : false);
+
+function StartVerification() {
+  console.log("開始驗證程序");
+}
 </script>

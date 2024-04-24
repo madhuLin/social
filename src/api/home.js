@@ -3,7 +3,7 @@ import { request } from "../utils/request.js";
 
 export function articleListApi() {
     return request({
-        'url': '/list',
+        'url': 'article/list',
         'method': 'get',
       })
 }
@@ -11,14 +11,6 @@ export function articleListApi() {
 export function boardListApi() {
   return request({
       'url': '/board',
-      'method': 'get',
-    })
-}
-
-
-export function boardListApi() {
-  return request({
-      'url': '/account',
       'method': 'get',
     })
 }

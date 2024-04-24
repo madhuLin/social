@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { useStore } from '../store/index.js';
 import { loginApi } from "../api/login_signUp.js";
 const router = useRouter();
+const store = useStore();
 const username = ref('');
 const password = ref('');
 
@@ -43,7 +44,10 @@ const submitForm = async () => {
         const res = await loginApi(data);
         if (res.data.code === 1) {
             // 如果請求成功
-            console.log("登入成功!");
+            const user = res.data.data;
+            // console.log("登入成功!", user);
+            localStorage.setItem("userInfo", JSON.stringify(user));
+            store.user = user;
             router.push('/');
         } else {
             // 如果請求失敗，列印錯誤訊息
