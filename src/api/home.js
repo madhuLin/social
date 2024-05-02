@@ -10,7 +10,7 @@ export function articleListApi() {
 
 export function boardListApi() {
   return request({
-      'url': '/board',
+      'url': '/board/list',
       'method': 'get',
     })
 }

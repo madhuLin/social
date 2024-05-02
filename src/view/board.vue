@@ -14,12 +14,12 @@
 
 <script setup>
 import {ref} from "vue";
-import { articleListApi, boardListApi } from "../api/home.js";
+import { boardListApi } from "../api/home.js";
 
 const boards = ref([]);
 boardListApi()
   .then((res) => {
-    // console.log(res.data.code);
+    console.log("board", res.data.code);
     if (res.data.code === 1) {
       // 如果請求成功，將文章列表資料賦值給articles
       boards.value = res.data.data || [];

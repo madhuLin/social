@@ -49,7 +49,7 @@ function StartVerification() {
   console.log("開始驗證程序");
 }
 
-const selectedType = ref('verify');
+const selectedType = ref('all');
 
 function changeArticleType(type) {
   selectedType.value = type;

@@ -59,8 +59,8 @@ const onSearch = (searchValue) => {
 };
 
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-const account = ref(userInfo ? `/user/${userInfo.username}` : "/login");
-const accountName = ref(userInfo ? userInfo.username : "帳戶");
+const account = ref(userInfo ? `/user/${userInfo.name}` : "/login");
+const accountName = ref(userInfo ? userInfo.name : "帳戶");
 
 </script>
 

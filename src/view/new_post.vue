@@ -81,12 +81,13 @@ const handleSubmit = async () => {
   let response; // 在函数作用域内声明 response 变量
   try {
     let data = {
-      username: userInfo.username,
+      username: userInfo.name,
       title: formData.value.title,
       address: userInfo.address,
       title: formData.value.title,
       content: formData.value.content,
-      publicationDate: new Date()
+      publicationDate:  Date.now(),
+      isChained: formData.value.OnChain,
     }
     console.log(formData.value.OnChain);
     response = await articlePortApi(data);
@@ -125,7 +126,7 @@ const uploadArticleBlockchain = async (data) => {
     from: account,
     to: contractAddress,
     value: "0",
-    data: socialContract.methods.publish(data.username, data.title, data.content, publicationDate).encodeABI(),
+    data: socialContract.methods.publish(data.name, data.title, data.content, publicationDate).encodeABI(),
   };
   try {
     const transactionHash = await ethereum.request({

@@ -48,9 +48,8 @@ const getArticleInfo = async () => {
   for (const articleIndex of articlesList) {
   const article = await socialContract.methods.getArticle(articleIndex).call();
   articles.value.push(article);
-  console.log(article.content);
+  // console.log(article.content);
 }
-console.log(articles.value);
 };
 
 onMounted(async () => {
@@ -77,7 +76,7 @@ onMounted(async () => {
 //   });
 
 
-web3
+
 
 </script>
 

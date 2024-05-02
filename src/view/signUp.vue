@@ -84,6 +84,7 @@ const submitForm = async () => {
             username: username.value,
             password: password.value,
         }
+        console.log(data);
 
         const res = await signUpApi(data);
         
