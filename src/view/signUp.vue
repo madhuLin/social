@@ -4,8 +4,7 @@ import useWeb3 from "../hooks/useWeb3.js";
 import { useRouter } from 'vue-router';
 import { signUpApi } from "../api/login_signUp.js";
 const router = useRouter();
-
-const { web3, getAccount } = useWeb3();
+const {web3, socialContract, getAccount, contractAddress} = useWeb3();
 const email = ref('');
 const password = ref('');
 const username = ref('');
@@ -30,6 +29,33 @@ onMounted(async () => {
     // const account = await getAccount();
     // console.log(account);
 });
+
+
+
+
+const registerUser = async (username) => {
+  console.log("registerUser", username);
+  const account = await getAccount();
+  const transactionParameters = {
+    from: account,
+    to: contractAddress,
+    value: "0",
+    data: socialContract.methods.registerUser(username).encodeABI(),
+    // gas: web3.utils.toHex(30000),
+  };
+  try {
+    const transactionHash = await ethereum.request({
+      method: "eth_sendTransaction",
+      params: [transactionParameters],
+    });
+    console.log("交易已提交，交易哈希:", transactionHash);
+    return true;
+    // 可以添加額外的邏輯處理，例如等待交易確認或處理交易回執等
+  } catch (error) {
+    console.error("發送交易時出錯:", error);
+    return false;
+  }
+};
 
 // 提交表單
 const submitForm = async () => {
@@ -71,7 +97,7 @@ const submitForm = async () => {
     }
 
 
-    try {
+    // try {
         // const data = new URLSearchParams();
         // data.append('email', email.value);
         // data.append('address', ethereumAddress.value);
@@ -86,6 +112,11 @@ const submitForm = async () => {
         }
         console.log(data);
 
+
+        const isResgister = await registerUser(username.value);
+        if(!isResgister) {
+            alert("交易失敗");
+            return;}
         const res = await signUpApi(data);
         
 
@@ -97,9 +128,9 @@ const submitForm = async () => {
             // 如果請求失敗，列印錯誤訊息
             alert("請求出錯: " + res.data.msg);
         }
-    } catch (err) {
-        console.error("請求出錯:", err.message);
-    }
+    // } catch (err) {
+    //     console.error("請求出錯:", err.message);
+    // }
 
     console.log('Form submitted!');
 

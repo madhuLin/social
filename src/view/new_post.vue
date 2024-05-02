@@ -44,7 +44,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { articlePortApi } from '../api/ipfs.js';
+import { articlePortApi, uploadToIPFS } from '../api/ipfs.js';
 import useWeb3 from "../hooks/useWeb3";
 const {web3, socialContract, getAccount, contractAddress} = useWeb3();
 
@@ -77,31 +77,45 @@ const handleFileUpload = (event) => {
   reader.readAsDataURL(file);
 };
 
+
+
 const handleSubmit = async () => {
   let response; // 在函数作用域内声明 response 变量
   try {
-    let data = {
+    const data = {
       username: userInfo.name,
       title: formData.value.title,
       address: userInfo.address,
-      title: formData.value.title,
       content: formData.value.content,
       publicationDate:  Date.now(),
-      isChained: formData.value.OnChain,
+      isChained: formData.value.isOnChain,
     }
-    console.log(formData.value.OnChain);
-    response = await articlePortApi(data);
-    if(response.data.code === 1) {
-      console.log("上傳伺服器成功!");
-      console.log("上鏈:",formData.value.OnChain, response.data.data);
-      if(formData.value.OnChain) {
-        data.content = response.data.data;
-        await uploadArticleBlockchain(data);
+    
+    if(formData.value.isOnChain) {
+      try {
+        const res = await uploadToIPFS(data.content);
+        if(res.data.code === 1) {
+          console.log('Data uploaded successfully with CID:', res.data.data);
+          const successChain = await uploadArticleBlockchain(data.title, res.data.data, data.publicationDate);
+          if(!successChain) {
+            alert("上鏈失敗請重試");
+            return;
+          }
+        } else {
+          console.log(res.data.data);
+        }
+      } catch (error) {
+        console.error('Error uploading data to IPFS:', error);
       }
     }
-    else {
+
+    response = await articlePortApi(data);
+    if(response.data.code === 1) {
+      console.log("上傳伺服器成功!", response.data);
+    } else {
       console.log("上傳失敗!");
     }
+
     console.log('Article uploaded:', response);
     // 重置表单数据
     formData.value = new FormData();
@@ -118,15 +132,16 @@ const handleSubmit = async () => {
 
 
 
-const uploadArticleBlockchain = async (data) => {
-  console.log("uploadArticleBlockchain");
+
+const uploadArticleBlockchain = async (title, content, publicationDate) => {
+  console.log("uploadArticleBlockchain", title, content, publicationDate);
+  // publicationDate = Math.floor(new Date().getTime() / 1000);
   const account = await getAccount();
-  const publicationDate = Math.floor(new Date().getTime() / 1000); // 将当前时间转换为 Unix 时间戳
   const transactionParameters = {
     from: account,
     to: contractAddress,
     value: "0",
-    data: socialContract.methods.publish(data.name, data.title, data.content, publicationDate).encodeABI(),
+    data: socialContract.methods.publish(title, content, publicationDate).encodeABI(),
   };
   try {
     const transactionHash = await ethereum.request({
@@ -134,9 +149,11 @@ const uploadArticleBlockchain = async (data) => {
       params: [transactionParameters],
     });
     console.log("交易已提交，交易哈希:", transactionHash);
+    return true;
     // 可以添加額外的邏輯處理，例如等待交易確認或處理交易回執等
   } catch (error) {
     console.error("發送交易時出錯:", error);
+    return false;
   }
 };
 

@@ -20,7 +20,7 @@ const userWeb3 = () => {
 
     // ---------------------------------------
     
-    const contractAddress = "0xB0eFA78F2b6B87281d2279f964F3ba02B3C6127d";
+    const contractAddress = "0xDA5F0BDf60F72670c7D755c3a7d824e3Da5cEc06";
     const socialContract = new web3.eth.Contract(
         socialJSON.abi,
         contractAddress,
