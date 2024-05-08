@@ -113,16 +113,18 @@ const submitForm = async () => {
         console.log(data);
 
 
-        const isResgister = await registerUser(username.value);
-        if(!isResgister) {
-            alert("交易失敗");
-            return;}
+        
         const res = await signUpApi(data);
         
 
         if (res.data.code === 1) {
             // 如果請求成功
             console.log("註冊成功!");
+            const isResgister = await registerUser(username.value);
+            if(!isResgister) {
+                alert("交易失敗");
+                return;
+            }
             router.push('/login');
         } else {
             // 如果請求失敗，列印錯誤訊息

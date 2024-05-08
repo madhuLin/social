@@ -50,8 +50,9 @@ const {web3, socialContract, getAccount, contractAddress} = useWeb3();
 
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 function changeType(boolen) {
-  formData.value.OnChain = boolen;
+  isChain.value = boolen;
 }
+const isChain = ref(false);
 
 // 创建一个 ref 来管理表单数据
 const formData = ref(new FormData());
@@ -59,7 +60,6 @@ const formData = ref(new FormData());
 // 添加表单字段
 formData.value.append('title', '');
 formData.value.append('content', '');
-formData.value.append('isOnChain', false);
 
 // 创建一个 ref 来管理图片
 const image = ref(null);
@@ -77,19 +77,24 @@ const handleFileUpload = (event) => {
   reader.readAsDataURL(file);
 };
 
-
+let data = null;
 
 const handleSubmit = async () => {
   let response; // 在函数作用域内声明 response 变量
   try {
-    const data = {
+    data = {
       username: userInfo.name,
       title: formData.value.title,
       address: userInfo.address,
       content: formData.value.content,
-      publicationDate:  Date.now(),
-      isChained: formData.value.isOnChain,
+      // publicationDate:  Math.floor(Date.now() / 1000),
+      publicationDate: Date.now(),
+
+      chained: isChain.value,
+      transactionHash : "aaa",
     }
+
+    console.log("data", data);
     
     if(formData.value.isOnChain) {
       try {
@@ -108,7 +113,7 @@ const handleSubmit = async () => {
         console.error('Error uploading data to IPFS:', error);
       }
     }
-
+    console.log(data);
     response = await articlePortApi(data);
     if(response.data.code === 1) {
       console.log("上傳伺服器成功!", response.data);
@@ -130,7 +135,7 @@ const handleSubmit = async () => {
   }
 };
 
-
+let transactionHash = null;
 
 
 const uploadArticleBlockchain = async (title, content, publicationDate) => {
@@ -144,11 +149,12 @@ const uploadArticleBlockchain = async (title, content, publicationDate) => {
     data: socialContract.methods.publish(title, content, publicationDate).encodeABI(),
   };
   try {
-    const transactionHash = await ethereum.request({
+    transactionHash = await ethereum.request({
       method: "eth_sendTransaction",
       params: [transactionParameters],
     });
     console.log("交易已提交，交易哈希:", transactionHash);
+    data.transactionHash = transactionHash;
     return true;
     // 可以添加額外的邏輯處理，例如等待交易確認或處理交易回執等
   } catch (error) {

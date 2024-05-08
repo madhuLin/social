@@ -19,13 +19,12 @@ const userWeb3 = () => {
     });
 
     // ---------------------------------------
-    
-    const contractAddress = "0xDA5F0BDf60F72670c7D755c3a7d824e3Da5cEc06";
+    // const contractAddress = "0xDA5F0BDf60F72670c7D755c3a7d824e3Da5cEc06";
+    const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
     const socialContract = new web3.eth.Contract(
         socialJSON.abi,
         contractAddress,
     );
-
     const getAccount = async () => {
         let accounts; 
         try {

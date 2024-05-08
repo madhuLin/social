@@ -14,7 +14,10 @@
             {{ ellipsis && article.content.length > 100 ? article.content.slice(0, 100) + '...' :
               article.content }}
           </p>
-
+          <!-- 点击按钮时显示弹出窗口 -->
+          <p>article.articleId{{article.articleId}}</p>
+          <button @click="showPopups(article.articleId)" class="bg-social-c2 text-white font-bold py-2 px-4 rounded-lg"> 链上信息</button>
+          <ChainInfo :chainInfo="chainInfo" v-if="showPopup" @close="() => showPopup = false"/>
           <!-- <div class="flex">
             <p class="mr-4">按讚數：{{ article.likeCount }}</p>
             <p class="mr-4">評論數：{{ article.commentCount }}</p>
@@ -27,7 +30,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
+import { articleChainInfoApi } from "../api/article.js";
+import ChainInfo from "../components/chainInfo.vue";
 import useWeb3 from "../hooks/useWeb3";
 const {web3, socialContract, getAccount} = useWeb3();
 
@@ -47,36 +52,54 @@ const getArticleInfo = async () => {
   
   for (const articleIndex of articlesList) {
   const article = await socialContract.methods.getArticle(articleIndex).call();
+  article.articleId = parseInt(articleIndex)+1;
   articles.value.push(article);
-  // console.log(article.content);
+  console.log(articles.value);
 }
 };
 
 onMounted(async () => {
   await getArticleInfo();
 });
-// 呼叫後端介面取得文章列表數據
-// articleListApi()
-//   .then((res) => {
-//     // console.log(res.data.data);
-//     if (res.data.code === 1) {
-//       // 如果請求成功，將文章列表資料賦值給articles
-//       articles.value = res.data.data || [];
-//       // res.data.data.forEach(item => {
-//       //   articles.push(item); // 将每个元素添加到 articles 数组中
-//       // });
-//       // articles.splice(0, articles.length, ...res.data.data);
-//     } else {
-//       // 如果請求失敗，列印錯誤訊息
-//       console.error("請求出錯:", res.data.msg);
-//     }
-//   })
-//   .catch((err) => {
-//     console.error("請求出錯:", err);
-//   });
 
 
 
+
+const showPopup = ref(false); // 控制弹出窗口的显示与隐藏
+
+// 父组件中的链上信息
+const chainInfo = reactive({
+  transactionHash: '...',
+  authorAddress: '...',
+  transactionFee: '...',
+  smartContractAddress: '...',
+  title: '...',
+  timestamp: '...'
+});
+
+const showPopups = (articleId) => {
+  // console.log("showPopups", articleId);
+  articleChainInfoApi(articleId).then((res) => {
+    if(res.data.code === 1) {
+      console.log("res.data",res.data.data);
+      const result = res.data.data;
+      chainInfo.transactionHash = result.transactionHash;
+      chainInfo.transactionFee = result.transactionFee;
+      chainInfo.smartContractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+      chainInfo.title = result.title;
+      chainInfo.timestamp = result.timestamp;
+      chainInfo.author = result.author;
+      chainInfo.authorAddress = result.authorAddress;
+      showPopup.value = true;
+    }
+    else {
+      console.log("error:",res.data.msg);
+    }
+  });
+
+
+  // showPopup.value = true;
+}
 
 </script>
 
