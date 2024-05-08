@@ -1,5 +1,5 @@
 <template>
-    <div v-if="show" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div v-if="show" class="fixed inset-0 flex items-center justify-center bg-opacity-50 text-social-primary">
       <div class="bg-white p-4 rounded shadow-md w-120 h-auto flex flex-col">
         <div class="flex justify-between">
           <h2 class="text-lg font-semibold">链上信息</h2>
@@ -12,7 +12,7 @@
         <div class="mt-2 flex-1">
           <p><strong>交易哈希：</strong> {{ chainInfo.transactionHash }}</p>
           <p><strong>发文者地址：</strong> {{ chainInfo.authorAddress }}</p>
-          <p><strong>交易手续费：</strong> {{ chainInfo.transactionFee }}</p>
+          <!-- <p><strong>交易手续费：</strong> {{ chainInfo.transactionFee }}</p> -->
           <p><strong>智能合约地址：</strong> {{ chainInfo.smartContractAddress }}</p>
           <p><strong>文章标题：</strong> {{ chainInfo.title }}</p>
           <p><strong>交易时间：</strong> {{ chainInfo.timestamp }}</p>

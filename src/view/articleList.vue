@@ -36,7 +36,7 @@ const formatDate = (dateStr) => {
                 <p class="font-bold">作者：{{ article.authorName }}</p>
                 <p>發佈日期：{{ formatDate(article.publicationDate) }}</p>
             </div>
-            <h3 class="text-lg font-bold mb-2 text-social-font">{{ article.title }}</h3>
+            <h3 class="text-lg font-bold mb-2 text-social-font" @click="$emit('showArticleWindow', article.id)">{{ article.title }}</h3>
             <p class="mb-2 text-social-font-second">
                 {{ ellipsis && article.content.length > 100 ? article.content.slice(0, 100) + '...' : article.content }}
             </p>
@@ -45,7 +45,7 @@ const formatDate = (dateStr) => {
                 <p class="mr-4">按讚數：{{ article.likeCount }}</p>
                 <p class="mr-4">評論數：{{ article.commentCount }}</p>
                 <p class="mr-4">收藏數：{{ article.bookmarkCount }}</p>
-                <p v-if="store.$isLoggedIn" @click="StartVerification">發起驗證</p>
+                <p v-if="(store.$isLoggedIn && article.chained)" @click="StartVerification">發起驗證</p>
             </div>
             <hr class="my-4 border-t border-gray-300" />
         </div>
