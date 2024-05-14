@@ -12,8 +12,8 @@ const ethereumAddress = ref('');
 
 function connectMetaMask() {
     if (window.ethereum) {
-        console.log('MetaMask 已安裝');
-
+        console.log('MetaMask 已安裝');  
+        console.log(getAccount);
         // 檢查使用者是否已經登入了 MetaMask
         if (window.ethereum.selectedAddress) {
             ethereumAddress.value = window.ethereum.selectedAddress;

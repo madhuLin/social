@@ -15,7 +15,7 @@
       <ChainArticleList v-if="selectedType=='chain'" :selectedType="selectedType"></ChainArticleList>
     </div>
     <!-- 文章彈窗 -->
-    <!-- <Article v-if="showArticle" :article_id="article_id" @close="() => showArticle=false"></Article> -->
+    <Article v-if="showArticle" :article_id="article_id" @close="() => showArticle=false"></Article>
     <!-- 右側內容 -->
     <div class="flex flex-col mx-4"></div>
     <!-- 右下角按鈕 -->
