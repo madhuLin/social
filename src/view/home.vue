@@ -39,7 +39,7 @@ import { useStore } from '../store/index.js';
 
 
 const Verifiable = ref(false);
-const showArticle = ref(true);
+const showArticle = ref(false);
 const store = useStore();
 onMounted(() => {
   //增加驗證按鈕

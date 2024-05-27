@@ -26,7 +26,7 @@ function connectMetaMask() {
     }
 }
 onMounted(async () => {
-    // const account = await getAccount();
+    const account = await getAccount();
     // console.log(account);
 });
 

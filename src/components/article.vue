@@ -4,6 +4,20 @@
 
     <!-- 彈窗內容 -->
     <div class="bg-white rounded-lg shadow-xl w-2/3 md:w-2/3 lg:w-2/3 xl:w-2/3 overflow-auto p-6 text-gray-700">
+      <!-- 看板內容 -->
+      <div class="flex mb-4 justify-between">
+        <!-- 看板圖片 -->
+        <!-- <img :src="article.image" alt="看板圖片"> -->
+
+        <!-- 看板標題 -->
+        <h3 class="text-lg font-semibold mb-2">看板</h3>
+
+        <!-- 關閉按鈕 -->
+        <button @click="$emit('close')"
+          class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-600">
+          關閉
+        </button>
+      </div>
       <!-- 文章標題 -->
       <h2 class="text-xl font-semibold mb-4">{{ article.title }}</h2>
       <!-- 作者和日期 -->
@@ -21,18 +35,14 @@
           <p class="text-gray-700">{{ comment.author }}: {{ comment.content }}</p>
         </div>
       </div>
-      <!-- 關閉按鈕 -->
-      <button @click="$emit('close')"
-        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-600">
-        關閉
-      </button>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, defineProps, onMounted, reactive } from 'vue';
-import { articleGetApi } from '../api/article.js';
+import { articleGetApi, addCommentApi, commentListApi } from '../api/article.js';
 const { article_id } = defineProps(['article_id']);
 const article = reactive({
   title: "",
@@ -40,8 +50,10 @@ const article = reactive({
   author: "",
   date: ""
 });
-onMounted(async () => {
-  console.log(article_id);
+
+const comments = ref([]);
+
+const getArticle = async () => {
   const response = await articleGetApi(article_id);
   if (response.data.code === 1) {
     article.title = response.data.data.title;
@@ -54,9 +66,42 @@ onMounted(async () => {
   else {
     console.log('文章不存在');
   }
+};
+
+
+onMounted(async () => {
+  console.log(article_id);
+  getArticle();
+  getCommentList();
 
 });
 
+ const  getCommentList = async () => {
+  const response = await commentListApi(article_id);
+  if(response.data.code === 1)  {
+    console.log('取得評論列表成功');
+    console.log(response.data.data);
+    for(let i = 0; i < response.data.data.length; i++) {
+      comments.value.push(response.data.data[i]);
+    }
+  }
+  else {
+    console.log('取得評論列表失敗');
+  }
+}
+
+const addComment = async (content) => {
+  const response = await addCommentApi(article_id, content);
+  if(response.data.code === 1)  {
+    console.log('發表評論成功');
+    // 刷新評論列表
+    
+  }
+  else {
+    console.log('發表評論失敗');
+  }
+  console.log(response);
+}
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();

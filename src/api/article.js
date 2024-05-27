@@ -20,3 +20,18 @@ export function articleGetApi(id) {
       method: 'get',
   });
 }
+
+export function commentListApi(){
+  return request({
+    url : `article/commentList`,
+    method : 'get',
+  });
+}
+export function addCommentApi(data) {
+  return request({
+    url : `article/addComment`,
+    method : 'post',
+    data : data
+  });
+
+}
